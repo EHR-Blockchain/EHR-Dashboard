@@ -8,8 +8,8 @@ import MUIDataTable from 'mui-datatables';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 
 export default function Welcome() {
+  const [viewDetails, setViewDetails] = useState(false);
   const { Meta } = Card;
-  // const columns = ['Record Id', 'Patient Id', 'Description', 'Prescription', 'Location'];
   const columns = [
     {
       name: 'Record Id',
@@ -30,11 +30,6 @@ export default function Welcome() {
       name: 'Description',
       options: {
         filter: false,
-        customHeadRender: (columnMeta, updateDirection) => (
-          <th key={2} onClick={() => updateDirection(2)} style={{ cursor: 'pointer' }}>
-            {columnMeta.name}
-          </th>
-        ),
       },
     },
     {
@@ -56,7 +51,7 @@ export default function Welcome() {
         filter: true,
         sort: false,
         customBodyRender: () => (
-          <Button type="primary" style={{ zIndex: 99999 }} onClick={setViewDetails}>
+          <Button type="primary" onClick={() => setViewDetails(true)}>
             View Details
           </Button>
         ),
@@ -73,6 +68,7 @@ export default function Welcome() {
   const [docDetails, setDocDetails] = useState([]);
   const [patientsData, setPatientsData] = useState([]);
   const [queriedPatient, setqueriedPatient] = useState([]);
+  const [patientId, setPatientId] = useState('string');
   const docId = 'pmcool97@gmail.com';
   useEffect(() => {
     axios({
@@ -90,7 +86,7 @@ export default function Welcome() {
       },
     }).then((response) => setPatientsData(response.data));
     axios({
-      url: `${apiUrl}/api/queries/selectMedicalRecordByDoctorId?doctorId=${docId}`,
+      url: `${apiUrl}/api/queries/selectMedicalRecordByDoctorAndPatientId?DoctorId=?doctorId=${docId}&doctorId=${docId}&patientId=${patientId}`,
       method: 'get',
       headers: {
         Authorization: `${access_token}`,
@@ -107,7 +103,6 @@ export default function Welcome() {
     Qualifications,
     address,
   } = docDetails;
-  const [viewDetails, setViewDetails] = useState(false);
   const { Text } = Typography;
   const getMuiTheme = () =>
     createMuiTheme({
@@ -167,8 +162,31 @@ export default function Welcome() {
         visible={viewDetails}
         onOk={() => setViewDetails(false)}
         onCancel={() => setViewDetails(false)}
+        footer={[
+          <Button key="back" onClick={() => setViewDetails(false)}>
+            Okay
+          </Button>,
+        ]}
       >
-        <Card>{JSON.stringify(queriedPatient, null, 4)}</Card>
+        <Card>
+          {queriedPatient.map((q) => (
+            <div key={q.id}>
+              <Meta
+                title={q.patientId}
+                description={`
+              Description: ${q.description}
+        `}
+              />{' '}
+              <div style={{ padding: 10 }} />
+              <p>
+                {' '}
+                {`Prescription: ${q.prescription}
+                Encounter Time: ${q.encounterTime}
+                 Location: ${q.location}`}
+              </p>
+            </div>
+          ))}
+        </Card>
       </Modal>
     </PageHeaderWrapper>
   );
