@@ -29,46 +29,33 @@ export default function App() {
   const { Meta } = Card;
   const columns = [
     {
-      name: "Record Id",
-      options: {
-        filter: true,
-        display: "excluded",
-      },
-    },
-    {
+      name: "patientId",
       label: "Patient Id",
-      name: "Patient Id",
-      options: {
-        filter: true,
-        sortDirection: "asc",
-      },
     },
     {
-      name: "Doctor Id",
-      options: {
-        filter: false,
-      },
+      label: "Age",
+      name: "age",
     },
     {
-      name: "Gender",
-      options: {
-        filter: true,
-      },
+      name: "gender",
+      label: "Gender",
     },
+
     {
-      name: "Age",
+      label: <></>,
+      name: "patientId",
       options: {
         filter: true,
         sort: false,
-      },
-    },
-    {
-      name: "View Details",
-      options: {
-        filter: true,
-        sort: false,
-        customBodyRender: () => (
-          <Button type="primary" onClick={() => setViewDetails(true)}>
+        customBodyRender: (value, tableMeta, updateValue) => (
+          <Button
+            type="primary"
+            onClick={() => {
+              setViewDetails(true);
+              console.log("VALUESSSSSSS", value);
+              setPatientId(value);
+            }}
+          >
             View Details
           </Button>
         ),
@@ -76,6 +63,8 @@ export default function App() {
     },
   ];
   const options = {
+    selectableRows: false,
+
     filter: false,
     print: false,
     search: false,
@@ -89,7 +78,7 @@ export default function App() {
   const [docDetails, setDocDetails] = useState([]);
   const [patientsData, setPatientsData] = useState([]);
   const [queriedPatient, setqueriedPatient] = useState([]);
-  const [patientId] = useState("biswajitmohanty141@gmail.com");
+  const [patientId, setPatientId] = useState("");
   const docId = email;
   useEffect(() => {
     axios({
@@ -129,7 +118,7 @@ export default function App() {
     <React.Fragment>
       {" "}
       {viewDetails ? (
-        <ViewDetails />
+        <ViewDetails queriedPatient={queriedPatient} />
       ) : (
         <Layout>
           <Header style={{ color: "#fff" }}>EHR Dashboard</Header>
@@ -144,9 +133,7 @@ export default function App() {
                   <MuiThemeProvider>
                     <MUIDataTable
                       options={options}
-                      data={patientsData.map((i) => {
-                        return Object.values(i);
-                      })}
+                      data={patientsData}
                       columns={columns}
                     />
                   </MuiThemeProvider>
@@ -190,7 +177,6 @@ export default function App() {
                 </div>
               </Card>
             </Row>
-            <pre>{JSON.stringify(queriedPatient, null, 4)}</pre>
             {/* <Modal
             style={{ zIndex: 9999999 }}
             title="Patient Details"
@@ -231,14 +217,17 @@ export default function App() {
   );
 }
 
-const ViewDetails = () => {
+const ViewDetails = (props) => {
   return (
     <div>
       {" "}
       <React.Fragment>
         <Header style={{ color: "#fff" }}>Patient Details</Header>
 
-        <Layout></Layout>
+        <Layout>
+          {" "}
+          <pre>{JSON.stringify(props.queriedPatient, null, 4)}</pre>
+        </Layout>
       </React.Fragment>
     </div>
   );
