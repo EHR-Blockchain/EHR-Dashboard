@@ -86,6 +86,9 @@ export default function App() {
   ];
   const options = {
     filter: false,
+    print: false,
+    search: false,
+    download: false,
     viewColumns: false,
     filterType: "dropdown",
 
