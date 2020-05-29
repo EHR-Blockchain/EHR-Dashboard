@@ -1,9 +1,19 @@
 import { MuiThemeProvider } from "@material-ui/core";
-import { Button, Card, Col, Divider, Layout, Row, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Divider,
+  Layout,
+  Row,
+  Typography,
+  Modal,
+} from "antd";
 import axios from "axios";
 import MUIDataTable from "mui-datatables";
 import React, { useEffect, useState } from "react";
-
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 const { Header, Footer, Content } = Layout;
 
 var QRCode = require("qrcode.react");
@@ -179,38 +189,7 @@ export default function App() {
                 </div>
               </Card>
             </Row>
-            {/* <Modal
-            style={{ zIndex: 9999999 }}
-            title="Patient Details"
-            visible={viewDetails}
-            onOk={() => setViewDetails(false)}
-            onCancel={() => setViewDetails(false)}
-            footer={[
-              <Button key="back" onClick={() => setViewDetails(false)}>
-                Okay
-              </Button>,
-            ]}
-          >
-            <Card>
-              {queriedPatient.map((q) => (
-                <div key={q.id}>
-                  <Meta
-                    title={q.patientId}
-                    description={`
-              Description: ${q.description}
-        `}
-                  />{" "}
-                  <div style={{ padding: 10 }} />
-                  <p>
-                    {" "}
-                    {`Prescription: ${q.prescription}
-                Encounter Time: ${q.encounterTime}
-                 Location: ${q.location}`}
-                  </p>
-                </div>
-              ))}
-            </Card>
-          </Modal> */}
+
             <Footer style={{ textAlign: "center" }}>EHR Dashboard</Footer>
           </Content>
         </Layout>
@@ -222,6 +201,7 @@ export default function App() {
 const ViewDetails = (props) => {
   const { Meta } = Card;
   const [goBack, setGoBack] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
   const [newPatientData, setNewPatientData] = useState([]);
   useEffect(() => {
     axios({
@@ -284,7 +264,33 @@ const ViewDetails = (props) => {
               </Card>
             ))}
           </Row>
+          <Fab
+            color="primary"
+            aria-label="add"
+            style={{
+              top: "auto",
+
+              float: "right",
+              margin: "0px",
+              right: "20px",
+              left: "auto",
+              position: "fixed",
+            }}
+            onClick={() => setFormOpen(true)}
+          >
+            <AddIcon />
+          </Fab>
         </Layout>
+        <Modal
+          style={{ zIndex: 9999999 }}
+          title="Patient Details"
+          visible={formOpen}
+          // onOk={() => setViewDetails(false)}
+          // onCancel={() => setViewDetails(false)}
+          footer={[<Button key="back">Okay</Button>]}
+        >
+          <Card></Card>
+        </Modal>
       </React.Fragment>
     </div>
   );
