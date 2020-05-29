@@ -123,7 +123,6 @@ export default function App() {
   const { Text } = Typography;
   const getMuiTheme = () =>
     createMuiTheme({
-      palette: { type: "dark" },
       overrides: {
         MUIDataTable: { root: { backgroundColor: "#141414" } },
       },
