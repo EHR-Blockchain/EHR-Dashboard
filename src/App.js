@@ -117,7 +117,10 @@ export default function App() {
     <React.Fragment>
       {" "}
       {viewDetails ? (
-        <ViewDetails queriedPatient={queriedPatient} />
+        <ViewDetails
+          queriedPatient={queriedPatient}
+          access_token={access_token}
+        />
       ) : (
         <Layout>
           <Header style={{ color: "#fff" }}>EHR Dashboard</Header>
@@ -219,6 +222,16 @@ export default function App() {
 const ViewDetails = (props) => {
   const { Meta } = Card;
   const [goBack, setGoBack] = useState(false);
+  const [newPatientData, setNewPatientData] = useState([]);
+  useEffect(() => {
+    axios({
+      url: `http://segurodroga.ml:3000/api/MedicalRecord`,
+      method: "get",
+      headers: {
+        Authorization: `${props.access_token}`,
+      },
+    }).then((response) => setNewPatientData(response.data));
+  }, [props.access_token]);
   if (goBack) {
     return <App />;
   }
@@ -234,9 +247,9 @@ const ViewDetails = (props) => {
         </Header>
 
         <Layout>
-          <Card>
+          <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
             {props.queriedPatient.map((q) => (
-              <div key={q.id}>
+              <Card key={q.id}>
                 <Meta
                   title={q.patientId}
                   description={`
@@ -250,9 +263,27 @@ const ViewDetails = (props) => {
                 Encounter Time: ${q.encounterTime}
                  Location: ${q.location}`}
                 </p>
-              </div>
+              </Card>
             ))}
-          </Card>
+
+            {newPatientData.map((q) => (
+              <Card key={q.id}>
+                <Meta
+                  title={q.patientId}
+                  description={`
+              Description: ${q.description}
+        `}
+                />{" "}
+                <div style={{ padding: 10 }} />
+                <p>
+                  {" "}
+                  {`Prescription: ${q.prescription}
+                Encounter Time: ${q.encounterTime}
+                 Location: ${q.location}`}
+                </p>
+              </Card>
+            ))}
+          </Row>
         </Layout>
       </React.Fragment>
     </div>
