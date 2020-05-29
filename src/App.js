@@ -1,14 +1,5 @@
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
-import {
-  Button,
-  Card,
-  Col,
-  Divider,
-  Layout,
-  Modal,
-  Row,
-  Typography,
-} from "antd";
+import { MuiThemeProvider } from "@material-ui/core";
+import { Button, Card, Col, Divider, Layout, Row, Typography } from "antd";
 import axios from "axios";
 import MUIDataTable from "mui-datatables";
 import React, { useEffect, useState } from "react";
@@ -133,76 +124,74 @@ export default function App() {
     address,
   } = docDetails;
   const { Text } = Typography;
-  const getMuiTheme = () =>
-    createMuiTheme({
-      overrides: {
-        MUIDataTable: { root: { backgroundColor: "#141414" } },
-      },
-      typography: { useNextVariants: true },
-    });
+
   return (
     <React.Fragment>
-      <Layout>
-        <Header style={{ color: "#fff" }}>EHR Dashboard</Header>
+      {" "}
+      {viewDetails ? (
+        <ViewDetails />
+      ) : (
+        <Layout>
+          <Header style={{ color: "#fff" }}>EHR Dashboard</Header>
 
-        <Content style={{ padding: "5%" }}>
-          <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-            <Col span={16}>
-              <Card>
-                <Divider orientation="left" style={{ fontWeight: "bold" }}>
-                  Patients Details
-                </Divider>{" "}
-                <MuiThemeProvider theme={getMuiTheme()}>
-                  <MUIDataTable
-                    options={options}
-                    data={patientsData.map((i) => {
-                      return Object.values(i);
-                    })}
-                    columns={columns}
+          <Content style={{ padding: "5%" }}>
+            <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+              <Col span={16}>
+                <Card>
+                  <Divider orientation="left" style={{ fontWeight: "bold" }}>
+                    Patients Details
+                  </Divider>{" "}
+                  <MuiThemeProvider>
+                    <MUIDataTable
+                      options={options}
+                      data={patientsData.map((i) => {
+                        return Object.values(i);
+                      })}
+                      columns={columns}
+                    />
+                  </MuiThemeProvider>
+                </Card>
+              </Col>
+              <Col span={1} />
+              <Card
+                hoverable
+                cover={
+                  <QRCode
+                    value={email}
+                    style={{ width: "100%", height: "auto" }}
                   />
-                </MuiThemeProvider>
-              </Card>
-            </Col>
-            <Col span={1} />
-            <Card
-              hoverable
-              cover={
-                <QRCode
-                  value={email}
-                  style={{ width: "100%", height: "auto" }}
+                }
+              >
+                <Meta
+                  title={`Dr.${firstName} ${lastName}`}
+                  description={`${email}`}
                 />
-              }
-            >
-              <Meta
-                title={`Dr.${firstName} ${lastName}`}
-                description={`${email}`}
-              />
-              <Divider orientation="left" style={{ fontWeight: "bold" }}>
-                Details
-              </Divider>{" "}
-              <div style={{ display: "block" }}>
-                <Text strong>DoctorId: </Text>
-                <Text style={{ float: "right" }}>{profileId}</Text>
-                <br />
-                <Text strong>DOB: </Text>
-                <Text style={{ float: "right" }}> {Dob}</Text>
-                <br />
-                <Text strong>Qualifications: </Text>
-                <Text style={{ float: "right" }}>{Qualifications}</Text>
-                <br />
-                <Text strong>Address: </Text>
-                <Text style={{ float: "right" }}>{profileId}</Text>
-                <br />
-                <Text strong>Country:</Text>{" "}
-                <Text style={{ float: "right" }}>
-                  {address && Object.values(address.country)}
-                </Text>
-                <br />
-              </div>
-            </Card>
-          </Row>
-          <pre>{JSON.stringify(queriedPatient, null, 4)}</pre>
-          <Modal
+                <Divider orientation="left" style={{ fontWeight: "bold" }}>
+                  Details
+                </Divider>{" "}
+                <div style={{ display: "block" }}>
+                  <Text strong>DoctorId: </Text>
+                  <Text style={{ float: "right" }}>{profileId}</Text>
+                  <br />
+                  <Text strong>DOB: </Text>
+                  <Text style={{ float: "right" }}> {Dob}</Text>
+                  <br />
+                  <Text strong>Qualifications: </Text>
+                  <Text style={{ float: "right" }}>{Qualifications}</Text>
+                  <br />
+                  <Text strong>Address: </Text>
+                  <Text style={{ float: "right" }}>{profileId}</Text>
+                  <br />
+                  <Text strong>Country:</Text>{" "}
+                  <Text style={{ float: "right" }}>
+                    {address && Object.values(address.country)}
+                  </Text>
+                  <br />
+                </div>
+              </Card>
+            </Row>
+            <pre>{JSON.stringify(queriedPatient, null, 4)}</pre>
+            {/* <Modal
             style={{ zIndex: 9999999 }}
             title="Patient Details"
             visible={viewDetails}
@@ -233,10 +222,24 @@ export default function App() {
                 </div>
               ))}
             </Card>
-          </Modal>
-          <Footer style={{ textAlign: "center" }}>EHR Dashboard</Footer>
-        </Content>
-      </Layout>
+          </Modal> */}
+            <Footer style={{ textAlign: "center" }}>EHR Dashboard</Footer>
+          </Content>
+        </Layout>
+      )}
     </React.Fragment>
   );
 }
+
+const ViewDetails = () => {
+  return (
+    <div>
+      {" "}
+      <React.Fragment>
+        <Header style={{ color: "#fff" }}>Patient Details</Header>
+
+        <Layout></Layout>
+      </React.Fragment>
+    </div>
+  );
+};
