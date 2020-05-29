@@ -217,15 +217,42 @@ export default function App() {
 }
 
 const ViewDetails = (props) => {
+  const { Meta } = Card;
+  const [goBack, setGoBack] = useState(false);
+  if (goBack) {
+    return <App />;
+  }
   return (
     <div>
       {" "}
       <React.Fragment>
-        <Header style={{ color: "#fff" }}>Patient Details</Header>
+        <Header
+          style={{ color: "#fff", cursor: "pointer" }}
+          onClick={() => setGoBack(true)}
+        >
+          Patient Details
+        </Header>
 
         <Layout>
-          {" "}
-          <pre>{JSON.stringify(props.queriedPatient, null, 4)}</pre>
+          <Card>
+            {props.queriedPatient.map((q) => (
+              <div key={q.id}>
+                <Meta
+                  title={q.patientId}
+                  description={`
+              Description: ${q.description}
+        `}
+                />{" "}
+                <div style={{ padding: 10 }} />
+                <p>
+                  {" "}
+                  {`Prescription: ${q.prescription}
+                Encounter Time: ${q.encounterTime}
+                 Location: ${q.location}`}
+                </p>
+              </div>
+            ))}
+          </Card>
         </Layout>
       </React.Fragment>
     </div>
