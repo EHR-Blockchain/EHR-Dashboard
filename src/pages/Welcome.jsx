@@ -27,19 +27,19 @@ export default function Welcome() {
       },
     },
     {
-      name: 'Description',
+      name: 'Doctor Id',
       options: {
         filter: false,
       },
     },
     {
-      name: 'Prescription',
+      name: 'Gender',
       options: {
         filter: true,
       },
     },
     {
-      name: 'Location',
+      name: 'Age',
       options: {
         filter: true,
         sort: false,
@@ -63,12 +63,12 @@ export default function Welcome() {
     filterType: 'dropdown',
     responsive: 'stacked',
   };
-  const access_token = 'IRjsp7mWcTinLEixW0W8j7dRhZKyLCiHn0SqAdzVrAYFscjM5CRuCK5RN91lMmBA';
+  const access_token = 'V3zRqS6NOrfl18M5D4BeZvrmPHutrSoOeUbV35BIVXm5LS2iMB2noEhAkE1EdWGb';
 
   const [docDetails, setDocDetails] = useState([]);
   const [patientsData, setPatientsData] = useState([]);
   const [queriedPatient, setqueriedPatient] = useState([]);
-  const [patientId, setPatientId] = useState('string');
+  const [patientId, setPatientId] = useState('joshi19981998@gmail.com');
   const docId = 'pmcool97@gmail.com';
   useEffect(() => {
     axios({
@@ -86,7 +86,7 @@ export default function Welcome() {
       },
     }).then((response) => setPatientsData(response.data));
     axios({
-      url: `${apiUrl}/api/queries/selectMedicalRecordByDoctorAndPatientId?DoctorId=?doctorId=${docId}&doctorId=${docId}&patientId=${patientId}`,
+      url: `${apiUrl}/api/queries/selectMedicalRecordByDoctorAndPatientId?DoctorId=?doctorId=${docId}&doctorId=vrkarthik14@gmail.com&patientId=${patientId}`,
       method: 'get',
       headers: {
         Authorization: `${access_token}`,
@@ -156,6 +156,7 @@ export default function Welcome() {
           </div>
         </Card>
       </Row>
+      <pre>{JSON.stringify(queriedPatient, null, 4)}</pre>
       <Modal
         style={{ zIndex: 9999999 }}
         title="Patient Details"
