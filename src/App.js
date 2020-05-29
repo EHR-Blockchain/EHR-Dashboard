@@ -4,15 +4,15 @@ import {
   Card,
   Col,
   Divider,
+  Layout,
   Modal,
   Row,
   Typography,
-  Layout,
 } from "antd";
 import axios from "axios";
-
 import MUIDataTable from "mui-datatables";
 import React, { useEffect, useState } from "react";
+
 const { Header, Footer, Content } = Layout;
 
 var QRCode = require("qrcode.react");
@@ -91,10 +91,6 @@ export default function App() {
 
     responsive: "stacked",
   };
-  // too be changed
-
-  // const access_token =
-  //   "V3zRqS6NOrfl18M5D4BeZvrmPHutrSoOeUbV35BIVXm5LS2iMB2noEhAkE1EdWGb";
 
   const [docDetails, setDocDetails] = useState([]);
   const [patientsData, setPatientsData] = useState([]);
