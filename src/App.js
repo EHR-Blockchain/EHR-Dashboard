@@ -1,19 +1,22 @@
 import { MuiThemeProvider } from "@material-ui/core";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 import {
   Button,
   Card,
   Col,
   Divider,
+  Form,
+  Input,
   Layout,
+  Modal,
   Row,
   Typography,
-  Modal,
 } from "antd";
 import axios from "axios";
 import MUIDataTable from "mui-datatables";
 import React, { useEffect, useState } from "react";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
+
 const { Header, Footer, Content } = Layout;
 
 var QRCode = require("qrcode.react");
@@ -201,8 +204,10 @@ export default function App() {
 const ViewDetails = (props) => {
   const { Meta } = Card;
   const [goBack, setGoBack] = useState(false);
-  const [formOpen, setFormOpen] = useState(false);
+  const [formOpen, setFormOpen] = useState(true);
   const [newPatientData, setNewPatientData] = useState([]);
+
+  const [records, setRecords] = useState(0);
   useEffect(() => {
     axios({
       url: `http://segurodroga.ml:3000/api/MedicalRecord`,
@@ -210,11 +215,50 @@ const ViewDetails = (props) => {
       headers: {
         Authorization: `${props.access_token}`,
       },
-    }).then((response) => setNewPatientData(response.data));
-  }, [props.access_token]);
+    }).then((response) => {
+      setNewPatientData(response.data);
+      setRecords(newPatientData.length);
+    });
+  }, [newPatientData.length, props.access_token, setNewPatientData]);
   if (goBack) {
     return <App />;
   }
+  const layout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 16 },
+  };
+  const tailLayout = {
+    wrapperCol: { offset: 8, span: 16 },
+  };
+  const [form] = Form.useForm();
+
+  const onFinish = ({ location, description, prescription }) => {
+    console.log(location);
+    axios({
+      url: `http://segurodroga.ml:3000/api/MedicalRecord`,
+      method: "post",
+      headers: {
+        Authorization: `${props.access_token}`,
+      },
+      data: {
+        $class: "org.med.chain.MedicalRecord",
+        recordId: 1 + records,
+        patientId: "hellotest0gmail.com",
+        doctorId: "pmcool97gmail.com",
+        version: 0,
+        authorized: [],
+        description: description,
+        prescription: prescription,
+        encounterTime: "2020-05-29T18:35:43.742Z",
+        location: location,
+      },
+    }).then((response) => alert("Submitted"));
+  };
+
+  const onReset = () => {
+    form.resetFields();
+  };
+
   return (
     <div>
       {" "}
@@ -289,7 +333,46 @@ const ViewDetails = (props) => {
           // onCancel={() => setViewDetails(false)}
           footer={[<Button key="back">Okay</Button>]}
         >
-          <Card></Card>
+          <Card>
+            <Form
+              {...layout}
+              form={form}
+              name="control-hooks"
+              onFinish={onFinish}
+            >
+              <Form.Item
+                name="prescription"
+                label="Prescription"
+                rules={[{ required: true }]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name="description"
+                label="Description"
+                rules={[{ required: true }]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                name="location"
+                label="Location"
+                rules={[{ required: true }]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item {...tailLayout}>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+                <Button htmlType="button" onClick={onReset}>
+                  Reset
+                </Button>
+              </Form.Item>
+            </Form>
+          </Card>
         </Modal>
       </React.Fragment>
     </div>
