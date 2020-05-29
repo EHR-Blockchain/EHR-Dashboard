@@ -86,7 +86,7 @@ export default function App() {
   const [docDetails, setDocDetails] = useState([]);
   const [patientsData, setPatientsData] = useState([]);
   const [queriedPatient, setqueriedPatient] = useState([]);
-  const [patientId, setPatientId] = useState("joshi19981998@gmail.com");
+  const [patientId] = useState("joshi19981998@gmail.com");
   const docId = email;
   useEffect(() => {
     axios({
@@ -103,6 +103,7 @@ export default function App() {
         Authorization: `${access_token}`,
       },
     }).then((response) => setPatientsData(response.data));
+
     axios({
       url: `http://segurodroga.ml:3000/api/queries/selectMedicalRecordByDoctorAndPatientId?DoctorId=?doctorId=${docId}&doctorId=${email}&patientId=${patientId}`,
       method: "get",
