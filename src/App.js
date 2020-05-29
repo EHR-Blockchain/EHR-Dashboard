@@ -132,6 +132,7 @@ export default function App() {
       {viewDetails ? (
         <ViewDetails
           queriedPatient={queriedPatient}
+          patientId={patientId}
           access_token={access_token}
         />
       ) : (
@@ -204,9 +205,9 @@ export default function App() {
 const ViewDetails = (props) => {
   const { Meta } = Card;
   const [goBack, setGoBack] = useState(false);
-  const [formOpen, setFormOpen] = useState(true);
+  const [formOpen, setFormOpen] = useState(false);
   const [newPatientData, setNewPatientData] = useState([]);
-
+  const onClickCloseModal = () => setFormOpen(false);
   const [records, setRecords] = useState(0);
   useEffect(() => {
     axios({
@@ -233,7 +234,6 @@ const ViewDetails = (props) => {
   const [form] = Form.useForm();
 
   const onFinish = ({ location, description, prescription }) => {
-    console.log(location);
     axios({
       url: `http://segurodroga.ml:3000/api/MedicalRecord`,
       method: "post",
@@ -243,7 +243,7 @@ const ViewDetails = (props) => {
       data: {
         $class: "org.med.chain.MedicalRecord",
         recordId: 1 + records,
-        patientId: "hellotest0gmail.com",
+        patientId: props.patientId,
         doctorId: "pmcool97gmail.com",
         version: 0,
         authorized: [],
@@ -329,9 +329,9 @@ const ViewDetails = (props) => {
           style={{ zIndex: 9999999 }}
           title="Patient Details"
           visible={formOpen}
-          // onOk={() => setViewDetails(false)}
-          // onCancel={() => setViewDetails(false)}
-          footer={[<Button key="back">Okay</Button>]}
+          onOk={() => onClickCloseModal()}
+          onCancel={() => onClickCloseModal()}
+          footer={[<></>]}
         >
           <Card>
             <Form
