@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-
-import { Card, Divider, Row, Col, Typography, Button, Modal } from "antd";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import { Button, Card, Col, Divider, Modal, Row, Typography } from "antd";
 import axios from "axios";
 import MUIDataTable from "mui-datatables";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+
 var QRCode = require("qrcode.react");
 
 export default function App() {
@@ -94,7 +94,6 @@ export default function App() {
     }).then((response) => setqueriedPatient(response.data));
   }, [patientId]);
   const {
-    ImageURL,
     firstName,
     lastName,
     EmailAddress,
