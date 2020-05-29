@@ -47,12 +47,11 @@ export default function App() {
       options: {
         filter: true,
         sort: false,
-        customBodyRender: (value, tableMeta, updateValue) => (
+        customBodyRender: (value) => (
           <Button
             type="primary"
             onClick={() => {
               setViewDetails(true);
-              console.log("VALUESSSSSSS", value);
               setPatientId(value);
             }}
           >
