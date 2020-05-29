@@ -7,6 +7,22 @@ import React, { useEffect, useState } from "react";
 var QRCode = require("qrcode.react");
 
 export default function App() {
+  var getParams = function (url) {
+    var params = {};
+    var parser = document.createElement("a");
+    parser.href = url;
+    var query = parser.search.substring(1);
+    var vars = query.split("&");
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split("=");
+      params[pair[0]] = decodeURIComponent(pair[1]);
+    }
+    return params;
+  };
+  const params = getParams(window.location.href);
+
+  const email = params.email;
+  const access_token = params.access_token;
   const [viewDetails, setViewDetails] = useState(false);
   const { Meta } = Card;
   const columns = [
@@ -64,14 +80,14 @@ export default function App() {
   };
   // too be changed
 
-  const access_token =
-    "V3zRqS6NOrfl18M5D4BeZvrmPHutrSoOeUbV35BIVXm5LS2iMB2noEhAkE1EdWGb";
+  // const access_token =
+  //   "V3zRqS6NOrfl18M5D4BeZvrmPHutrSoOeUbV35BIVXm5LS2iMB2noEhAkE1EdWGb";
 
   const [docDetails, setDocDetails] = useState([]);
   const [patientsData, setPatientsData] = useState([]);
   const [queriedPatient, setqueriedPatient] = useState([]);
   const [patientId, setPatientId] = useState("joshi19981998@gmail.com");
-  const docId = "pmcool97@gmail.com";
+  const docId = email;
   useEffect(() => {
     axios({
       url: `http://segurodroga.ml:3000/api/DoctorProfile/${docId}`,
@@ -88,17 +104,16 @@ export default function App() {
       },
     }).then((response) => setPatientsData(response.data));
     axios({
-      url: `http://segurodroga.ml:3000/api/queries/selectMedicalRecordByDoctorAndPatientId?DoctorId=?doctorId=${docId}&doctorId=vrkarthik14@gmail.com&patientId=${patientId}`,
+      url: `http://segurodroga.ml:3000/api/queries/selectMedicalRecordByDoctorAndPatientId?DoctorId=?doctorId=${docId}&doctorId=${email}&patientId=${patientId}`,
       method: "get",
       headers: {
         Authorization: `${access_token}`,
       },
     }).then((response) => setqueriedPatient(response.data));
-  }, [patientId]);
+  }, [access_token, docId, email, patientId]);
   const {
     firstName,
     lastName,
-    EmailAddress,
     profileId,
     Dob,
     Qualifications,
@@ -139,7 +154,7 @@ export default function App() {
         >
           <Meta
             title={`Dr.${firstName} ${lastName}`}
-            description={`${EmailAddress}`}
+            description={`${email}`}
           />
           <Divider orientation="left" style={{ fontWeight: "bold" }}>
             Details
