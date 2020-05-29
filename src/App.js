@@ -1,8 +1,19 @@
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
-import { Button, Card, Col, Divider, Modal, Row, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Divider,
+  Modal,
+  Row,
+  Typography,
+  Layout,
+} from "antd";
 import axios from "axios";
+
 import MUIDataTable from "mui-datatables";
 import React, { useEffect, useState } from "react";
+const { Header, Footer, Content } = Layout;
 
 var QRCode = require("qrcode.react");
 
@@ -74,8 +85,10 @@ export default function App() {
     },
   ];
   const options = {
-    filter: true,
+    filter: false,
+    viewColumns: false,
     filterType: "dropdown",
+
     responsive: "stacked",
   };
   // too be changed
@@ -86,7 +99,7 @@ export default function App() {
   const [docDetails, setDocDetails] = useState([]);
   const [patientsData, setPatientsData] = useState([]);
   const [queriedPatient, setqueriedPatient] = useState([]);
-  const [patientId] = useState("joshi19981998@gmail.com");
+  const [patientId] = useState("biswajitmohanty141@gmail.com");
   const docId = email;
   useEffect(() => {
     axios({
@@ -130,89 +143,101 @@ export default function App() {
     });
   return (
     <React.Fragment>
-      <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-        <Col span={16}>
-          <Card>
-            <Divider orientation="left" style={{ fontWeight: "bold" }}>
-              Patients Details
-            </Divider>{" "}
-            <MuiThemeProvider theme={getMuiTheme()}>
-              <MUIDataTable
-                options={options}
-                data={patientsData.map((i) => {
-                  return Object.values(i);
-                })}
-                columns={columns}
-              />
-            </MuiThemeProvider>
-          </Card>
-        </Col>
-        <Col span={1} />
-        <Card
-          hoverable
-          cover={<QRCode value="http://facebook.github.io/react/" />}
-        >
-          <Meta
-            title={`Dr.${firstName} ${lastName}`}
-            description={`${email}`}
-          />
-          <Divider orientation="left" style={{ fontWeight: "bold" }}>
-            Details
-          </Divider>{" "}
-          <div style={{ display: "block" }}>
-            <Text strong>DoctorId: </Text>
-            <Text style={{ float: "right" }}>{profileId}</Text>
-            <br />
-            <Text strong>DOB: </Text>
-            <Text style={{ float: "right" }}> {Dob}</Text>
-            <br />
-            <Text strong>Qualifications: </Text>
-            <Text style={{ float: "right" }}>{Qualifications}</Text>
-            <br />
-            <Text strong>Address: </Text>
-            <Text style={{ float: "right" }}>{profileId}</Text>
-            <br />
-            <Text strong>Country:</Text>{" "}
-            <Text style={{ float: "right" }}>
-              {address && Object.values(address.country)}
-            </Text>
-            <br />
-          </div>
-        </Card>
-      </Row>
-      <pre>{JSON.stringify(queriedPatient, null, 4)}</pre>
-      <Modal
-        style={{ zIndex: 9999999 }}
-        title="Patient Details"
-        visible={viewDetails}
-        onOk={() => setViewDetails(false)}
-        onCancel={() => setViewDetails(false)}
-        footer={[
-          <Button key="back" onClick={() => setViewDetails(false)}>
-            Okay
-          </Button>,
-        ]}
-      >
-        <Card>
-          {queriedPatient.map((q) => (
-            <div key={q.id}>
+      <Layout>
+        <Header style={{ color: "#fff" }}>EHR Dashboard</Header>
+
+        <Content style={{ padding: "5%" }}>
+          <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+            <Col span={16}>
+              <Card>
+                <Divider orientation="left" style={{ fontWeight: "bold" }}>
+                  Patients Details
+                </Divider>{" "}
+                <MuiThemeProvider theme={getMuiTheme()}>
+                  <MUIDataTable
+                    options={options}
+                    data={patientsData.map((i) => {
+                      return Object.values(i);
+                    })}
+                    columns={columns}
+                  />
+                </MuiThemeProvider>
+              </Card>
+            </Col>
+            <Col span={1} />
+            <Card
+              hoverable
+              cover={
+                <QRCode
+                  value={email}
+                  style={{ width: "100%", height: "auto" }}
+                />
+              }
+            >
               <Meta
-                title={q.patientId}
-                description={`
+                title={`Dr.${firstName} ${lastName}`}
+                description={`${email}`}
+              />
+              <Divider orientation="left" style={{ fontWeight: "bold" }}>
+                Details
+              </Divider>{" "}
+              <div style={{ display: "block" }}>
+                <Text strong>DoctorId: </Text>
+                <Text style={{ float: "right" }}>{profileId}</Text>
+                <br />
+                <Text strong>DOB: </Text>
+                <Text style={{ float: "right" }}> {Dob}</Text>
+                <br />
+                <Text strong>Qualifications: </Text>
+                <Text style={{ float: "right" }}>{Qualifications}</Text>
+                <br />
+                <Text strong>Address: </Text>
+                <Text style={{ float: "right" }}>{profileId}</Text>
+                <br />
+                <Text strong>Country:</Text>{" "}
+                <Text style={{ float: "right" }}>
+                  {address && Object.values(address.country)}
+                </Text>
+                <br />
+              </div>
+            </Card>
+          </Row>
+          <pre>{JSON.stringify(queriedPatient, null, 4)}</pre>
+          <Modal
+            style={{ zIndex: 9999999 }}
+            title="Patient Details"
+            visible={viewDetails}
+            onOk={() => setViewDetails(false)}
+            onCancel={() => setViewDetails(false)}
+            footer={[
+              <Button key="back" onClick={() => setViewDetails(false)}>
+                Okay
+              </Button>,
+            ]}
+          >
+            <Card>
+              {queriedPatient.map((q) => (
+                <div key={q.id}>
+                  <Meta
+                    title={q.patientId}
+                    description={`
               Description: ${q.description}
         `}
-              />{" "}
-              <div style={{ padding: 10 }} />
-              <p>
-                {" "}
-                {`Prescription: ${q.prescription}
+                  />{" "}
+                  <div style={{ padding: 10 }} />
+                  <p>
+                    {" "}
+                    {`Prescription: ${q.prescription}
                 Encounter Time: ${q.encounterTime}
                  Location: ${q.location}`}
-              </p>
-            </div>
-          ))}
-        </Card>
-      </Modal>
+                  </p>
+                </div>
+              ))}
+            </Card>
+          </Modal>
+          <Footer style={{ textAlign: "center" }}>EHR Dashboard</Footer>
+        </Content>
+      </Layout>
     </React.Fragment>
   );
 }
