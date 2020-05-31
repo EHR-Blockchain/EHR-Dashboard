@@ -1,6 +1,15 @@
 import { MuiThemeProvider } from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
+import LocalHospitalIcon from "@material-ui/icons/LocalHospital";
+import TimerIcon from "@material-ui/icons/Timer";
+import moment from "moment";
+import LocationCityIcon from "@material-ui/icons/LocationCity";
+import SchoolIcon from "@material-ui/icons/School";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import HomeIcon from "@material-ui/icons/Home";
+import LanguageIcon from "@material-ui/icons/Language";
+import EmailIcon from "@material-ui/icons/Email";
 import {
   Button,
   Card,
@@ -14,6 +23,7 @@ import {
   Typography,
 } from "antd";
 import axios from "axios";
+import DescriptionIcon from "@material-ui/icons/Description";
 import MUIDataTable from "mui-datatables";
 import React, { useEffect, useState } from "react";
 
@@ -166,26 +176,40 @@ export default function App() {
                 }
               >
                 <Meta
-                  title={`Dr.${firstName} ${lastName}`}
-                  description={`${email}`}
+                  title={
+                    <center>
+                      <Typography type="subheading">
+                        {" "}
+                        Dr.{firstName} {lastName}
+                      </Typography>
+                    </center>
+                  }
+                  description={
+                    <span style={{ display: "block" }}>
+                      <EmailIcon />
+                      <Typography style={{ float: "right" }}>
+                        {email}
+                      </Typography>
+                    </span>
+                  }
                 />
                 <Divider orientation="left" style={{ fontWeight: "bold" }}>
                   Details
                 </Divider>{" "}
                 <div style={{ display: "block" }}>
-                  <Text strong>DoctorId: </Text>
+                  <LocalHospitalIcon />
                   <Text style={{ float: "right" }}>{profileId}</Text>
                   <br />
-                  <Text strong>DOB: </Text>
+                  <AccountCircleIcon />{" "}
                   <Text style={{ float: "right" }}> {Dob}</Text>
                   <br />
-                  <Text strong>Qualifications: </Text>
+                  <SchoolIcon />{" "}
                   <Text style={{ float: "right" }}>{Qualifications}</Text>
                   <br />
-                  <Text strong>Address: </Text>
+                  <HomeIcon />{" "}
                   <Text style={{ float: "right" }}>{profileId}</Text>
                   <br />
-                  <Text strong>Country:</Text>{" "}
+                  <LanguageIcon />{" "}
                   <Text style={{ float: "right" }}>
                     {address && Object.values(address.country)}
                   </Text>
@@ -232,7 +256,7 @@ const ViewDetails = (props) => {
     wrapperCol: { offset: 8, span: 16 },
   };
   const [form] = Form.useForm();
-
+  console.log(props.queriedPatient[0]);
   const onFinish = ({ location, description, prescription }) => {
     axios({
       url: `http://segurodroga.ml:3000/api/MedicalRecord`,
@@ -273,41 +297,87 @@ const ViewDetails = (props) => {
         <Layout>
           <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
             {props.queriedPatient.map((q) => (
-              <Card key={q.id}>
+              <Card
+                key={q.id}
+                hoverable
+                style={{ width: 300 }}
+                cover={
+                  <img
+                    alt="example"
+                    src={`https://api.adorable.io/avatars/171/${q.patientId}`}
+                  />
+                }
+              >
                 <Meta
-                  title={q.patientId}
-                  description={`
-              Description: ${q.description}
-        `}
+                  title={
+                    <Typography style={{ color: "#A5AAC5" }}>
+                      {q.patientId}
+                    </Typography>
+                  }
+                  description={
+                    <span>
+                      <DescriptionIcon />{" "}
+                      <Typography>{q.description}</Typography>
+                    </span>
+                  }
                 />{" "}
                 <div style={{ padding: 10 }} />
-                <p>
-                  {" "}
-                  {`Prescription: ${q.prescription}
-                Encounter Time: ${q.encounterTime}
-                 Location: ${q.location}`}
-                </p>
+                <div style={{ display: "flex", padding: "20" }}>
+                  <LocalHospitalIcon />{" "}
+                  <Typography>{q.prescription}</Typography>
+                  <div style={{ padding: 10 }} />
+                  <TimerIcon />{" "}
+                  <Typography type="info" style={{ fontSize: "10px" }}>
+                    {moment(q.encounterTime).format("YYYY-MM-DD")}
+                  </Typography>
+                  <div style={{ padding: 10 }} />
+                  <LocationCityIcon /> <Typography>{q.location}</Typography>
+                  <div style={{ padding: 10 }} />
+                </div>
               </Card>
             ))}
-
             {newPatientData.map((q) => (
-              <Card key={q.id}>
+              <Card
+                key={q.id}
+                hoverable
+                style={{ width: 300 }}
+                cover={
+                  <img
+                    alt="example"
+                    src={`https://api.adorable.io/avatars/171/${q.patientId}`}
+                  />
+                }
+              >
                 <Meta
-                  title={q.patientId}
-                  description={`
-              Description: ${q.description}
-        `}
+                  title={
+                    <Typography style={{ color: "#A5AAC5" }}>
+                      {q.patientId}
+                    </Typography>
+                  }
+                  description={
+                    <span>
+                      <DescriptionIcon />{" "}
+                      <Typography>{q.description}</Typography>
+                    </span>
+                  }
                 />{" "}
                 <div style={{ padding: 10 }} />
-                <p>
-                  {" "}
-                  {`Prescription: ${q.prescription}
-                Encounter Time: ${q.encounterTime}
-                 Location: ${q.location}`}
-                </p>
+                <div style={{ display: "flex", padding: "20" }}>
+                  <LocalHospitalIcon />{" "}
+                  <Typography>{q.prescription}</Typography>
+                  <div style={{ padding: 10 }} />
+                  <TimerIcon />{" "}
+                  <Typography type="info" style={{ fontSize: "10px" }}>
+                    {moment(q.encounterTime).format("YYYY-MM-DD")}
+                  </Typography>
+                  <div style={{ padding: 10 }} />
+                  <LocationCityIcon /> <Typography>{q.location}</Typography>
+                  <div style={{ padding: 10 }} />
+                </div>
               </Card>
             ))}
           </Row>
+
           <Fab
             color="primary"
             aria-label="add"
