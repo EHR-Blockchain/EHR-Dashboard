@@ -300,7 +300,7 @@ const ViewDetails = (props) => {
               <Card
                 key={q.id}
                 hoverable
-                style={{ width: 300 }}
+                style={{ width: 300, padding: "10px", margin: "30px" }}
                 cover={
                   <img
                     alt="example"
@@ -340,7 +340,7 @@ const ViewDetails = (props) => {
               <Card
                 key={q.id}
                 hoverable
-                style={{ width: 300 }}
+                style={{ width: 300, padding: "10px", margin: "30px" }}
                 cover={
                   <img
                     alt="example"
