@@ -168,6 +168,7 @@ export default function App() {
               <Col span={1} />
               <Card
                 hoverable
+                style={{ width: 300, padding: "10px", margin: "30px" }}
                 cover={
                   <QRCode
                     value={email}
@@ -273,7 +274,7 @@ const ViewDetails = (props) => {
         authorized: [],
         description: description,
         prescription: prescription,
-        encounterTime: "2020-05-29T18:35:43.742Z",
+        encounterTime: moment(),
         location: location,
       },
     }).then((response) => alert("Submitted"));
