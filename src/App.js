@@ -10,6 +10,8 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import HomeIcon from "@material-ui/icons/Home";
 import LanguageIcon from "@material-ui/icons/Language";
 import EmailIcon from "@material-ui/icons/Email";
+import { Animated } from "react-animated-css";
+
 import {
   Button,
   Card,
@@ -152,71 +154,75 @@ export default function App() {
           <Content style={{ padding: "5%" }}>
             <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
               <Col span={16}>
-                <Card>
-                  <Divider orientation="left" style={{ fontWeight: "bold" }}>
-                    Patients Details
-                  </Divider>{" "}
-                  <MuiThemeProvider>
-                    <MUIDataTable
-                      options={options}
-                      data={patientsData}
-                      columns={columns}
-                    />
-                  </MuiThemeProvider>
-                </Card>
+                <Animated animationIn="bounceInLeft">
+                  <Card>
+                    <Divider orientation="left" style={{ fontWeight: "bold" }}>
+                      Patients Details
+                    </Divider>{" "}
+                    <MuiThemeProvider>
+                      <MUIDataTable
+                        options={options}
+                        data={patientsData}
+                        columns={columns}
+                      />
+                    </MuiThemeProvider>
+                  </Card>
+                </Animated>
               </Col>
               <Col span={1} />
-              <Card
-                hoverable
-                style={{ width: 300, padding: "10px", margin: "30px" }}
-                cover={
-                  <QRCode
-                    value={email}
-                    style={{ width: "100%", height: "auto" }}
+              <Animated animationIn="bounceInRight">
+                <Card
+                  hoverable
+                  style={{ width: 300, padding: "10px", margin: "30px" }}
+                  cover={
+                    <QRCode
+                      value={email}
+                      style={{ width: "100%", height: "auto" }}
+                    />
+                  }
+                >
+                  <Meta
+                    title={
+                      <center>
+                        <Typography type="subheading">
+                          {" "}
+                          Dr.{firstName} {lastName}
+                        </Typography>
+                      </center>
+                    }
+                    description={
+                      <span style={{ display: "block" }}>
+                        <EmailIcon />
+                        <Typography style={{ float: "right" }}>
+                          {email}
+                        </Typography>
+                      </span>
+                    }
                   />
-                }
-              >
-                <Meta
-                  title={
-                    <center>
-                      <Typography type="subheading">
-                        {" "}
-                        Dr.{firstName} {lastName}
-                      </Typography>
-                    </center>
-                  }
-                  description={
-                    <span style={{ display: "block" }}>
-                      <EmailIcon />
-                      <Typography style={{ float: "right" }}>
-                        {email}
-                      </Typography>
-                    </span>
-                  }
-                />
-                <Divider orientation="left" style={{ fontWeight: "bold" }}>
-                  Details
-                </Divider>{" "}
-                <div style={{ display: "block" }}>
-                  <LocalHospitalIcon />
-                  <Text style={{ float: "right" }}>{profileId}</Text>
-                  <br />
-                  <AccountCircleIcon />{" "}
-                  <Text style={{ float: "right" }}> {Dob}</Text>
-                  <br />
-                  <SchoolIcon />{" "}
-                  <Text style={{ float: "right" }}>{Qualifications}</Text>
-                  <br />
-                  <HomeIcon />{" "}
-                  <Text style={{ float: "right" }}>{profileId}</Text>
-                  <br />
-                  <LanguageIcon />{" "}
-                  <Text style={{ float: "right" }}>
-                    {address && Object.values(address.country)}
-                  </Text>
-                  <br />
-                </div>
-              </Card>
+                  <Divider orientation="left" style={{ fontWeight: "bold" }}>
+                    Details
+                  </Divider>{" "}
+                  <div style={{ display: "block" }}>
+                    <LocalHospitalIcon />
+                    <Text style={{ float: "right" }}>{profileId}</Text>
+                    <br />
+                    <AccountCircleIcon />{" "}
+                    <Text style={{ float: "right" }}> {Dob}</Text>
+                    <br />
+                    <SchoolIcon />{" "}
+                    <Text style={{ float: "right" }}>{Qualifications}</Text>
+                    <br />
+                    <HomeIcon />{" "}
+                    <Text style={{ float: "right" }}>{profileId}</Text>
+                    <br />
+                    <LanguageIcon />{" "}
+                    <Text style={{ float: "right" }}>
+                      {address && Object.values(address.country)}
+                    </Text>
+                    <br />
+                  </div>
+                </Card>
+              </Animated>
             </Row>
 
             <Footer style={{ textAlign: "center" }}>EHR Dashboard</Footer>
@@ -283,7 +289,7 @@ const ViewDetails = (props) => {
   const onReset = () => {
     form.resetFields();
   };
-
+  var delayer = 1000;
   return (
     <div>
       {" "}
@@ -298,84 +304,92 @@ const ViewDetails = (props) => {
         <Layout>
           <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
             {props.queriedPatient.map((q) => (
-              <Card
-                key={q.id}
-                hoverable
-                style={{ width: 300, padding: "10px", margin: "30px" }}
-                cover={
-                  <img
-                    alt="example"
-                    src={`https://api.adorable.io/avatars/171/${q.patientId}`}
-                  />
-                }
-              >
-                <Meta
-                  title={
-                    <Typography style={{ color: "#A5AAC5" }}>
-                      {q.patientId}
+              <Animated animationIn="lightSpeedIn" animationInDelay={1000}>
+                <Card
+                  key={q.id}
+                  hoverable
+                  style={{ width: 300, padding: "10px", margin: "30px" }}
+                  cover={
+                    <img
+                      alt="example"
+                      src={`https://api.adorable.io/avatars/171/${q.patientId}`}
+                    />
+                  }
+                >
+                  <Meta
+                    title={
+                      <Typography style={{ color: "#A5AAC5" }}>
+                        {q.patientId}
+                      </Typography>
+                    }
+                    description={
+                      <span>
+                        <DescriptionIcon />{" "}
+                        <Typography>{q.description}</Typography>
+                      </span>
+                    }
+                  />{" "}
+                  <div style={{ padding: 10 }} />
+                  <div style={{ display: "flex", padding: "20" }}>
+                    <LocalHospitalIcon />{" "}
+                    <Typography>{q.prescription}</Typography>
+                    <div style={{ padding: 10 }} />
+                    <TimerIcon />{" "}
+                    <Typography type="info" style={{ fontSize: "10px" }}>
+                      {moment(q.encounterTime).format("YYYY-MM-DD")}
                     </Typography>
-                  }
-                  description={
-                    <span>
-                      <DescriptionIcon />{" "}
-                      <Typography>{q.description}</Typography>
-                    </span>
-                  }
-                />{" "}
-                <div style={{ padding: 10 }} />
-                <div style={{ display: "flex", padding: "20" }}>
-                  <LocalHospitalIcon />{" "}
-                  <Typography>{q.prescription}</Typography>
-                  <div style={{ padding: 10 }} />
-                  <TimerIcon />{" "}
-                  <Typography type="info" style={{ fontSize: "10px" }}>
-                    {moment(q.encounterTime).format("YYYY-MM-DD")}
-                  </Typography>
-                  <div style={{ padding: 10 }} />
-                  <LocationCityIcon /> <Typography>{q.location}</Typography>
-                  <div style={{ padding: 10 }} />
-                </div>
-              </Card>
+                    <div style={{ padding: 10 }} />
+                    <LocationCityIcon /> <Typography>{q.location}</Typography>
+                    <div style={{ padding: 10 }} />
+                  </div>
+                </Card>
+              </Animated>
             ))}
+
             {newPatientData.map((q) => (
-              <Card
-                key={q.id}
-                hoverable
-                style={{ width: 300, padding: "10px", margin: "30px" }}
-                cover={
-                  <img
-                    alt="example"
-                    src={`https://api.adorable.io/avatars/171/${q.patientId}`}
-                  />
-                }
+              <Animated
+                animationIn="lightSpeedIn"
+                animationInDelay={(delayer += 500)}
               >
-                <Meta
-                  title={
-                    <Typography style={{ color: "#A5AAC5" }}>
-                      {q.patientId}
+                <Card
+                  key={q.id}
+                  hoverable
+                  style={{ width: 300, padding: "10px", margin: "30px" }}
+                  cover={
+                    <img
+                      alt="example"
+                      src={`https://api.adorable.io/avatars/171/${q.patientId}`}
+                    />
+                  }
+                >
+                  <Meta
+                    title={
+                      <Typography style={{ color: "#A5AAC5" }}>
+                        {q.patientId}
+                      </Typography>
+                    }
+                    description={
+                      <span>
+                        <DescriptionIcon />{" "}
+                        <Typography>{q.description}</Typography>
+                      </span>
+                    }
+                  />{" "}
+                  <div style={{ padding: 10 }} />
+                  <div style={{ display: "flex", padding: "20" }}>
+                    <LocalHospitalIcon />{" "}
+                    <Typography>{q.prescription}</Typography>
+                    <div style={{ padding: 10 }} />
+                    <TimerIcon />{" "}
+                    <Typography type="info" style={{ fontSize: "10px" }}>
+                      {moment(q.encounterTime).format("YYYY-MM-DD")}
                     </Typography>
-                  }
-                  description={
-                    <span>
-                      <DescriptionIcon />{" "}
-                      <Typography>{q.description}</Typography>
-                    </span>
-                  }
-                />{" "}
-                <div style={{ padding: 10 }} />
-                <div style={{ display: "flex", padding: "20" }}>
-                  <LocalHospitalIcon />{" "}
-                  <Typography>{q.prescription}</Typography>
-                  <div style={{ padding: 10 }} />
-                  <TimerIcon />{" "}
-                  <Typography type="info" style={{ fontSize: "10px" }}>
-                    {moment(q.encounterTime).format("YYYY-MM-DD")}
-                  </Typography>
-                  <div style={{ padding: 10 }} />
-                  <LocationCityIcon /> <Typography>{q.location}</Typography>
-                  <div style={{ padding: 10 }} />
-                </div>
-              </Card>
+                    <div style={{ padding: 10 }} />
+                    <LocationCityIcon /> <Typography>{q.location}</Typography>
+                    <div style={{ padding: 10 }} />
+                  </div>
+                </Card>
+              </Animated>
             ))}
           </Row>
 
