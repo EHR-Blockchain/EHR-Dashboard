@@ -10,7 +10,7 @@
     "@testing-library/user-event": "^7.1.2",
     "antd": "^4.2.5",
     "axios": "^0.19.2",
-    "moment": "^2.26.0",
+    "moment": "^2.29.2",
     "mui-datatables": "^2.14.0",
     "qrcode.react": "^1.0.0",
     "react": "^16.13.1",
